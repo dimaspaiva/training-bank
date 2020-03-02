@@ -1,0 +1,20 @@
+{
+  "name": "training-bank",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dimaspaiva/training-bank.git",
+  "author": "dimaspaiva <dimasalpaiva@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1"
+  },
+  "scripts": {
+    "dev": "PORT=3030 nodemon ./src/server.js"
+  }
+}
