@@ -20,6 +20,7 @@
   },
   "scripts": {
     "dev": "PORT=3030 nodemon ./src/server.js",
-    "test": "jest"
+    "test": "jest",
+    "star": "PORT=4545 ./src/server.js"
   }
 }

@@ -1,6 +1,5 @@
-it('should test the test framework', () => {
-  const a = 3;
-  const b = 5;
-
-  expect(a + b).toBe(8);
+describe('user', () => {
+  it('should create an user', async () => {
+    const {}
+  });
 });
