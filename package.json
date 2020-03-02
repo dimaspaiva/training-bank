@@ -6,15 +6,20 @@
   "author": "dimaspaiva <dimasalpaiva@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "mysql2": "^2.1.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
-    "prettier": "^1.19.1"
+    "prettier": "^1.19.1",
+    "sqlite3": "^4.1.1"
   },
   "scripts": {
-    "dev": "PORT=3030 nodemon ./src/server.js"
+    "dev": "PORT=3030 nodemon ./src/server.js",
+    "test": "jest"
   }
 }

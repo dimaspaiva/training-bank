@@ -1,9 +1,9 @@
-const express = require("express");
+const express = require('express');
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.json({ message: "working" });
+app.get('/', (req, res) => {
+  res.json({ message: 'working' });
 });
 
 app.use(express.json());
