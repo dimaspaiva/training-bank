@@ -7,6 +7,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.17.1",
+    "sqlite3": "^4.1.1",
     "mysql2": "^2.1.0"
   },
   "devDependencies": {
@@ -16,12 +17,11 @@
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "sqlite3": "^4.1.1",
     "supertest": "^4.0.2"
   },
   "scripts": {
-    "dev": "PORT=3030 nodemon ./src/server.js",
-    "test": "jest",
-    "star": "PORT=4545 ./src/server.js"
+    "dev": "MODE=dev nodemon ./src/server.js",
+    "test": "MODE=test PORT=3030 jest",
+    "star": "PORT 4567./src/server.js"
   }
 }
