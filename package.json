@@ -16,7 +16,8 @@
     "jest": "^25.1.0",
     "nodemon": "^2.0.2",
     "prettier": "^1.19.1",
-    "sqlite3": "^4.1.1"
+    "sqlite3": "^4.1.1",
+    "supertest": "^4.0.2"
   },
   "scripts": {
     "dev": "PORT=3030 nodemon ./src/server.js",
