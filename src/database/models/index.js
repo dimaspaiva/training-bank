@@ -140,4 +140,31 @@ module.exports = class DbModel {
 
     return data[0];
   }
+
+  async update(id, data) {
+    let query = `UPDATE ${this.tableName} SET `;
+
+    Object.keys(data).forEach((key) => {
+      if (typeof data[key] === 'string') {
+        query = query.concat(`${key} = '${data[key]}', `);
+      } else {
+        query = query.concat(`${key} = ${data[key]}, `);
+      }
+    });
+    query = query.slice(0, -2).concat(` WHERE id = ${id};`);
+
+    await new Promise((resolve, reject) => {
+      // eslint-disable-next-line prefer-arrow-callback
+      db.run(query, [], function(err) {
+        if (err) {
+          reject(err);
+        }
+
+        resolve();
+      });
+    });
+
+    const updated = await this.selectEspecific(`id = ${id}`);
+    return updated;
+  }
 };

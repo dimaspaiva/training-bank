@@ -19,14 +19,18 @@ module.exports = {
     const id = parseInt(req.params.id, 10);
     const data = req.body;
 
-    // console.log(data);
+    const findUser = await User.selectEspecific(`id = ${id}`);
 
-    const bills = await User.updateBills(id, data);
+    if (Object.keys(data).length !== 4) {
+      return res.status(400).json({ message: 'Missing data' });
+    }
 
-    console.log(bills);
+    if (!findUser) {
+      return res.status(400).json({ message: 'User dont exist' });
+    }
 
-    const newUser = await User.update(id, bills);
+    const newUser = await User.update(id, data);
 
-    return res.status(200).json({ ...newUser });
+    return res.status(200).send({ ...newUser });
   },
 };
