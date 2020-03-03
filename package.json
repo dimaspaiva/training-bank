@@ -21,7 +21,9 @@
   },
   "scripts": {
     "dev": "MODE=dev nodemon ./src/server.js",
+    "pretest": "MODE=test node ./__tests__/utils/createTables",
     "test": "MODE=test PORT=3030 jest",
+    "posttest": "MODE=test node ./__tests__/utils/deleteTables",
     "star": "PORT 4567./src/server.js"
   }
 }

@@ -57,9 +57,23 @@ module.exports = class DbModel {
     return data;
   }
 
+  async cleanTable() {
+    await new Promise((resolve, reject) => {
+      // eslint-disable-next-line prefer-arrow-callback
+      db.run(`DELETE FROM ${this.tableName}`, [], function(err) {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+
+    return 'Table clean';
+  }
+
   async selectAll() {
     const data = await new Promise((resolve, reject) => {
-      db.run(`SELECT * FROM ${this.tableName};`, (err, rows) => {
+      db.all(`SELECT * FROM ${this.tableName};`, (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -70,36 +84,60 @@ module.exports = class DbModel {
     return data;
   }
 
+  // querry = Complement to where in sql
   async selectEspecific(query) {
     const data = await new Promise((resolve, reject) => {
-      db.run(`SELECT * FROM ${this.tableName} WHERE ${query}`, (err, rows) => {
+      db.all(`SELECT * FROM ${this.tableName} WHERE ${query};`, (err, rows) => {
         if (err) {
           reject(err);
         }
+
         resolve(rows);
       });
     });
 
-    return data;
+    return data[0];
   }
 
   async create(table) {
     let query = `INSERT INTO ${this.tableName} (`;
-    console.log(query);
-
     Object.keys(table).forEach((key) => {
       query = query.concat(`${key}, `);
     });
-    query = query.slice(0, -2).concat(') value(');
-    console.log(query);
-
+    query = query.slice(0, -2).concat(') VALUES(');
     Object.keys(table).forEach((key) => {
       if (key !== 'createdAt' && key !== 'updatedAt') {
-        query = query.concat(`${table[key]}, `);
+        if (typeof table[key] === 'string') {
+          query = query.concat(`'${table[key]}', `);
+        } else {
+          query = query.concat(`${table[key]}, `);
+        }
       }
     });
 
-    console.log(query);
-    return 'ok';
+    query = query.slice(0, -2).concat(');');
+    const id = await new Promise((resolve, reject) => {
+      db.run(query, function(err) {
+        if (err) {
+          reject(err);
+        }
+        resolve(this.lastID);
+      });
+    });
+
+    const data = await new Promise((resolve, reject) => {
+      db.all(
+        `select * from ${this.tableName} where id = ${id}`,
+        (err, rows) => {
+          if (err) {
+            reject(err);
+          }
+
+          resolve(rows);
+        },
+      );
+    });
+
+    return data[0];
   }
 };
