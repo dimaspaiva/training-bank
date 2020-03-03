@@ -5,18 +5,24 @@ let db = {};
 switch (process.env.MODE) {
   case 'test':
     db = new sqlite3.Database(
-      path.resolve(__dirname / +'/databases/databaseTestTest.sqlite')
+      path.resolve(__dirname, 'databaseTest.sqlite'),
+      sqlite3.OPEN_READWRITE,
     );
     break;
+
   case 'dev':
     db = new sqlite3.Database(
-      path.resolve(__dirname / +'/databases/databaseTestDev.sqlite')
+      path.resolve(__dirname, 'databaseDev.sqlite'),
+      sqlite3.OPEN_READWRITE,
     );
     break;
+
   default:
     db = new sqlite3.Database(
-      path.resolve(__dirname / +'/databases/databaseTest.sqlite')
+      path.resolve(__dirname, 'database.sqlite'),
+      sqlite3.OPEN_READWRITE,
     );
+    break;
 }
 
 module.exports = db;

@@ -4,13 +4,13 @@ module.exports = class DbModel {
   constructor(table) {
     this.table = table;
     this.tableName = table.tableName;
+    delete this.table.tableName;
+
+    this.createTable();
   }
 
   createTableQuery() {
-    const { tableName } = this.table;
-    delete this.table.tableName;
-
-    let query = `CREATE TABLE IF NOT EXISTS ${tableName} (`;
+    let query = `CREATE TABLE IF NOT EXISTS ${this.tableName} (`;
 
     Object.keys(this.table).forEach((key) => {
       query = query.concat(
@@ -18,20 +18,20 @@ module.exports = class DbModel {
           this.table[key].primaryKey ? 'PRIMARY KEY' : ''
         } ${!this.table[key].allowNull ? 'NOT NULL' : ''} ${
           this.table[key].unique ? 'UNIQUE' : ''
-        },`
+        }, `,
       );
     });
-    return query.slice(0, -2).concat(');');
+
+    query = query.slice(0, -2).concat(');');
+
+    return query;
   }
 
   async createTable() {
-    const query = this.createTableQuery(this.table);
-
-    db.run(query);
+    const query = await this.createTableQuery();
 
     const data = await new Promise((resolve, reject) => {
-      db.all(`Create table ${this.table.tableName}`, (err, rows) => {
-        console.log(rows);
+      db.run(query, (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -44,11 +44,8 @@ module.exports = class DbModel {
   }
 
   async dropTable() {
-    db.run(`DROP TABLE ${this.tableName}`);
-
     const data = await new Promise((resolve, reject) => {
-      db.all(`Drop table ${this.tableNameb}`, (err, rows) => {
-        console.log(rows);
+      db.run(`DROP TABLE IF EXISTS ${this.tableName};`, (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -62,7 +59,7 @@ module.exports = class DbModel {
 
   async selectAll() {
     const data = await new Promise((resolve, reject) => {
-      db.all(`SELECT * FROM ${this.tableName};`, (err, rows) => {
+      db.run(`SELECT * FROM ${this.tableName};`, (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -75,7 +72,7 @@ module.exports = class DbModel {
 
   async selectEspecific(query) {
     const data = await new Promise((resolve, reject) => {
-      db.all(`SELECT * FROM ${this.tableName} WHERE ${query}`, (err, rows) => {
+      db.run(`SELECT * FROM ${this.tableName} WHERE ${query}`, (err, rows) => {
         if (err) {
           reject(err);
         }
@@ -86,22 +83,23 @@ module.exports = class DbModel {
     return data;
   }
 
-  async create(object) {
-    const data = await new Promise((resolve, reject) => {
-      let query = `INSERT INTO ${this.tableName} (`;
+  async create(table) {
+    let query = `INSERT INTO ${this.tableName} (`;
+    console.log(query);
 
-      Object.keys(this.table).forEach((key) => {
-        query = query.concat(`${key}, `);
-      });
-      query = query.slice(0, -2).concat(') value(');
-
-      console.log(query);
-
-      Object.keys(object).forEach((key) => {
-        query = query.concat(`${object[key]}, `);
-      });
-
-      console.log(query);
+    Object.keys(table).forEach((key) => {
+      query = query.concat(`${key}, `);
     });
+    query = query.slice(0, -2).concat(') value(');
+    console.log(query);
+
+    Object.keys(table).forEach((key) => {
+      if (key !== 'createdAt' && key !== 'updatedAt') {
+        query = query.concat(`${table[key]}, `);
+      }
+    });
+
+    console.log(query);
+    return 'ok';
   }
 };

@@ -31,12 +31,12 @@ const user = new Model({
   },
 
   createdAt: {
-    type: 'DATE',
+    type: 'DATETIME DEFAULT CURRENT_TIMESTAMP',
     allowNull: false,
   },
 
   updatedAt: {
-    type: 'DATE',
+    type: 'DATETIME DEFAULT CURRENT_TIMESTAMP',
     allowNull: false,
   },
 });

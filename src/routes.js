@@ -1,9 +1,7 @@
 const routes = require('express').Router();
 
-routes.post('/user', (req, res) => {
-  console.log(req.body);
+const UserController = require('./app/controllers/UserController');
 
-  return res.status(200).send();
-});
+routes.post('/user', UserController.store);
 
 module.exports = routes;
