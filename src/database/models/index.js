@@ -84,7 +84,7 @@ module.exports = class DbModel {
     return data;
   }
 
-  // querry = Complement to where in sql
+  // querry = begin after the "where" in big query
   async selectEspecific(query) {
     const data = await new Promise((resolve, reject) => {
       db.all(`SELECT * FROM ${this.tableName} WHERE ${query};`, (err, rows) => {
@@ -166,5 +166,22 @@ module.exports = class DbModel {
 
     const updated = await this.selectEspecific(`id = ${id}`);
     return updated;
+  }
+
+  async updateUserBills(id, bills) {
+    const query = `UPDATE ${this.tableName} SET bills = ${bills} WHERE id = ${id};`;
+
+    await new Promise((resolve, reject) => {
+      // eslint-disable-next-line prefer-arrow-callback
+      db.run(query, [], function(err) {
+        if (err) {
+          reject(err);
+        }
+
+        resolve();
+      });
+    });
+
+    return this.selectEspecific(`id = '${id}'`);
   }
 };

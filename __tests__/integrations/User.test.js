@@ -4,9 +4,6 @@ const app = require('../../src/app');
 const cleanup = require('../utils/cleanupTables');
 
 describe('user', () => {
-  // beforeAll(async () => {
-  //   await cleanup();
-  // });
   beforeEach(async () => {
     await cleanup();
   });
@@ -96,7 +93,7 @@ describe('user', () => {
     };
 
     const response = await request(app)
-      .patch(`/user/${user.id}`)
+      .put(`/user/${user.id}`)
       .send(newUser);
 
     expect(response.status).toBe(200);
@@ -112,7 +109,7 @@ describe('user', () => {
     };
 
     const response = await request(app)
-      .patch('/user/100')
+      .put('/user/100')
       .send(user);
 
     expect(response.status).toBe(400);
@@ -139,8 +136,154 @@ describe('user', () => {
     };
 
     const response = await request(app)
-      .patch(`/user/${user.id}`)
+      .put(`/user/${user.id}`)
       .send(newUser);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message');
+  });
+
+  it('should decrement use bills', async () => {
+    const userCreate = {
+      name: 'Jose Oswaldo',
+      cpf: '11678598631',
+      salary: 1600.66,
+      bills: 30,
+    };
+
+    const user = (
+      await request(app)
+        .post('/user')
+        .send(userCreate)
+    ).body;
+
+    const bills = {
+      newBills: 20.22,
+      signal: true,
+    };
+
+    const response = await request(app)
+      .patch(`/user/bills/${user.id}`)
+      .send(bills);
+
+    expect(response.status).toBe(200);
+    expect(response.body.bills).toBe(9.78);
+  });
+
+  it('should pay all bills', async () => {
+    const userCreate = {
+      name: 'Jose Oswaldo',
+      cpf: '11678598631',
+      salary: 1600.66,
+      bills: 30,
+    };
+
+    const user = (
+      await request(app)
+        .post('/user')
+        .send(userCreate)
+    ).body;
+
+    const bills = {
+      newBills: 30,
+      signal: true,
+    };
+
+    const response = await request(app)
+      .patch(`/user/bills/${user.id}`)
+      .send(bills);
+
+    expect(response.status).toBe(200);
+    expect(response.body.bills).toBe(0);
+  });
+
+  it('should add user bills', async () => {
+    const userCreate = {
+      name: 'Jose Oswaldo',
+      cpf: '11678598631',
+      salary: 1600.66,
+      bills: 0,
+    };
+
+    const user = (
+      await request(app)
+        .post('/user')
+        .send(userCreate)
+    ).body;
+
+    const bills = {
+      newBills: 30.0,
+    };
+
+    const response = await request(app)
+      .patch(`/user/bills/${user.id}`)
+      .send(bills);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty('updatedAt');
+  });
+
+  it('should increment user bills', async () => {
+    const userCreate = {
+      name: 'Jose Oswaldo',
+      cpf: '11678598631',
+      salary: 1600.66,
+      bills: 20,
+    };
+
+    const user = (
+      await request(app)
+        .post('/user')
+        .send(userCreate)
+    ).body;
+
+    const bills = {
+      newBills: 30.3,
+    };
+
+    const response = await request(app)
+      .patch(`/user/bills/${user.id}`)
+      .send(bills);
+
+    expect(response.status).toBe(200);
+    expect(response.body.bills).toBe(50.3);
+  });
+
+  it('shouldnt increment inexistent user', async () => {
+    const bills = {
+      newBills: 30,
+    };
+
+    const response = await request(app)
+      .patch(`/user/bills/${100}`)
+      .send(bills);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty('message');
+  });
+
+  it('shouldnt decrement to lower then zeri', async () => {
+    const userCreate = {
+      name: 'Jose Oswaldo',
+      cpf: '11678598631',
+      salary: 1600.66,
+      bills: 20,
+    };
+
+    const user = (
+      await request(app)
+        .post('/user')
+        .send(userCreate)
+    ).body;
+
+    const bills = {
+      newBills: 30.3,
+      signal: true,
+    };
+
+    const response = await request(app)
+      .patch(`/user/bills/${user.id}`)
+      .send(bills);
 
     expect(response.status).toBe(400);
     expect(response.body).toHaveProperty('message');

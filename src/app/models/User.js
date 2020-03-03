@@ -41,4 +41,18 @@ const user = new Model({
   },
 });
 
+Model.prototype.updateBillsValue = async (id, { newBills, signal }) => {
+  const { bills } = await user.selectEspecific(`id = ${id}`);
+
+  if (!newBills) {
+    return 0;
+  }
+
+  if (signal) {
+    return parseFloat(parseFloat(bills) - parseFloat(newBills));
+  }
+
+  return parseFloat(bills) + parseFloat(newBills);
+};
+
 module.exports = user;

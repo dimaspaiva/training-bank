@@ -33,4 +33,27 @@ module.exports = {
 
     return res.status(200).send({ ...newUser });
   },
+
+  updateBills: async (req, res) => {
+    const id = parseInt(req.params.id, 10);
+    const data = req.body;
+
+    const user = await User.selectEspecific(`id = ${id}`);
+
+    if (!user) {
+      return res.status(400).json({ message: 'User dont exist' });
+    }
+
+    const bills = (await User.updateBillsValue(id, data)).toFixed(2);
+
+    if (bills < 0) {
+      return res
+        .status(400)
+        .json({ message: `Bills is lower then ${data.newBills}` });
+    }
+
+    const newUser = await User.updateUserBills(id, bills);
+
+    return res.status(200).json({ ...newUser });
+  },
 };
