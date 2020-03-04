@@ -1,0 +1,29 @@
+{
+  "name": "training-bank",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/dimaspaiva/training-bank.git",
+  "author": "dimaspaiva <dimasalpaiva@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^4.1.1",
+    "mysql2": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "jest": "^25.1.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^1.19.1",
+    "supertest": "^4.0.2"
+  },
+  "scripts": {
+    "dev": "MODE=dev nodemon ./src/server.js",
+    "pretest": "MODE=test node ./__tests__/utils/createTables",
+    "test": "MODE=test PORT=3030 jest",
+    "posttest": "MODE=test node ./__tests__/utils/deleteTables",
+    "star": "PORT 4567./src/server.js"
+  }
+}

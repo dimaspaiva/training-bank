@@ -1,0 +1,33 @@
+# Logs
+backend/logs
+backend/*.log
+backend/npm-debug.log*
+backend/yarn-debug.log*
+backend/yarn-error.log*
+backend/lerna-debug.log*
+backend/.node_modules
+# REACT 
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+bank-react/node_modules
+bank-react/.pnp
+bank-react/.pnp.js
+
+# testing
+bank-react/coverage
+
+# production
+bank-react/.node_modules
+bank-react/build
+
+# misc
+bank-react/.DS_Store
+bank-react/.env.local
+bank-react/.env.development.local
+bank-react/.env.test.local
+bank-react/.env.production.local
+
+bank-react/npm-debug.log*
+bank-react/yarn-debug.log*
+bank-react/yarn-error.log*
