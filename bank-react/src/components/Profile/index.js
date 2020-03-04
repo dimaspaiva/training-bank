@@ -1,12 +1,15 @@
 import React from 'react';
-import { Container, Photo, ProfilePhoto } from './styles';
+
+import { Container } from './styles';
+
+import User from '../User';
+import Infos from '../Infos';
 
 export default function Profile() {
   return (
     <Container>
-      <ProfilePhoto>
-        <Photo src="https://api.adorable.io/avatars/285/abott@adorable.p" />
-      </ProfilePhoto>
+      <User />
+      <Infos />
     </Container>
   );
 }
